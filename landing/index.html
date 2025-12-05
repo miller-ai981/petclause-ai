@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PetClause AI | Pet Clause Compliance Checker for Rentals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root{
+      --primary:#2563eb;
+      --primary-light:#eef4ff;
+      --dark:#0f172a;
+      --text:#334155;
+      --light:#f8fafc;
+      --grey:#64748b;
+      --font:'Inter',sans-serif;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      font-family:var(--font);
+      background:#ffffff;
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    .container{
+      width:90%;
+      max-width:1100px;
+      margin:auto;
+      
+    }
+
+    a{text-decoration:none;color:inherit;}
+
+    /* Logo */
+    .logo-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:center;
+      margin-bottom:25px;
+      user-select:none;
+    }
+    .logo-icon{
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      background:linear-gradient(145deg,#ffffff,#e5edff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    }
+    .logo-icon::before{content:"🐾";font-size:22px;}
+    .logo-text{font-size:2rem;font-weight:800;}
+
+    /* Hero */
+    header.hero{
+      background:linear-gradient(135deg,#4A6CF7 0%, #7B4AED 100%);
+      padding:110px 0 130px;
+      color:white;
+      text-align:center;
+    }
+    .hero h1{
+      font-size:3rem;
+      font-weight:800;
+      line-height:1.15;
+      max-width:720px;
+      margin:auto;
+    }
+    .hero .highlight{
+      color:#fffd96;
+      font-weight:800;
+    }
+    .hero p{
+      font-size:1.2rem;
+      max-width:650px;
+      margin:20px auto 40px;
+      opacity:0.97;
+    }
+
+    .btn{
+      display:inline-block;
+      background:white;
+      color:var(--primary);
+      padding:15px 32px;
+      font-size:1.1rem;
+      font-weight:700;
+      border-radius:40px;
+      transition:.25s;
+      margin-top: 12px;
+    }
+    .btn:hover{
+      transform:translateY(-3px);
+      box-shadow:0 10px 25px rgba(255,255,255,0.25);
+    }
+
+    .trust{
+      margin-top:22px;
+      display:flex;
+      gap:26px;
+      justify-content:center;
+      color:#f1f5f9;
+      font-size:0.95rem;
+      opacity:0.9;
+    }
+
+    /* Modal Scanner */
+    #scannerModal{
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    #scannerBox{
+      background:white;
+      width:100%;
+      max-width:900px;
+      height:90%;
+      border-radius:14px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.3);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      animation:fadeUp .35s ease-out;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(30px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    #scannerHeader{
+      padding:15px 20px;
+      background:var(--light);
+      border-bottom:1px solid #e2e8f0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    #scannerFrame{
+      width:100%;
+      height:100%;
+      border:none;
+    }
+
+    .close-btn{
+      background:none;
+      border:none;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--grey);
+      transition:0.2s;
+    }
+    .close-btn:hover{color:#000;}
+
+    /* Sections */
+    section{
+      padding:80px 0;
+    }
+    .section-title{
+      text-align:center;
+      font-size:2.2rem;
+      font-weight:800;
+      margin-bottom:50px;
+      color:var(--dark);
+    }
+
+    /* How it works */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:30px;
+      text-align:center;
+    }
+    .step i{
+      font-size:2rem;
+      background:var(--primary-light);
+      color:var(--primary);
+      width:65px;height:65px;
+      line-height:65px;
+      border-radius:50%;
+      margin-bottom:15px;
+    }
+
+    /* Features */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:30px;
+    }
+    .card{
+      background:white;
+      padding:30px;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+      text-align:center;
+      transition:.25s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    }
+    .card i{
+      font-size:2rem;
+      margin-bottom:15px;
+      color:var(--primary);
+    }
+
+    /* Testimonials */
+    .t-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+    }
+    blockquote{
+      background:white;
+      padding:25px;
+      border-radius:10px;
+      border-left:4px solid var(--primary);
+      font-style:italic;
+    }
+    blockquote cite{
+      display:block;
+      margin-top:12px;
+      font-weight:700;
+      font-style:normal;
+      color:var(--grey);
+    }
+
+    /* CTA */
+    section.cta{
+      background:var(--primary);
+      color:white;
+      text-align:center;
+    }
+    .cta h2{
+      font-size:2.3rem;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    /* Footer */
+    footer{
+      background:var(--dark);
+      color:#cbd5e1;
+      padding:40px 0;
+      text-align:center;
+      font-size:0.9rem;
+    }
+
+    @media(max-width:600px){
+      .hero h1{font-size:2rem;}
+      .hero p{font-size:1rem;}
+      .logo-text{font-size:1.7rem;}
+    }
+  </style>
+
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="logo-wrap">
+      <div class="logo-icon"></div>
+      <div class="logo-text">PetClause AI</div>
+    </div>
+
+   <h1>Avoid <span class="highlight">$4,150 fines</span> from one wrong pet sentence.</h1>
+    <p>AI checks your rental listing against local pet ordinances in 10 seconds. Fix risky text instantly and download a compliant version.</p>
+   
+    <a class="btn" href="javascript:void(0)" onclick="openScanner()">
+      Try It Free <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    </a>
+
+    <div class="trust">
+      <span><i class="fa-solid fa-shield-halved"></i> No login</span>
+      <span><i class="fa-solid fa-clock"></i> 10-second scan</span>
+      <span><i class="fa-solid fa-city"></i> US + EU coverage</span>
+    </div>
+  </div>
+</header>
+
+
+<!-- FULLSCREEN MODAL -->
+<div id="scannerModal">
+  <div id="scannerBox">
+    <div id="scannerHeader">
+      <strong>PetClause AI – Scanner</strong>
+      <button class="close-btn" onclick="closeScanner()">✕</button>
+    </div>
+    <iframe id="scannerFrame" src="https://petclauseai.streamlit.app/?embed=true&theme=light"></iframe>
+  </div>
+</div>
+
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <i class="fa-solid fa-file-lines"></i>
+        <h3>1. Paste your listing</h3>
+        <p>From Zillow, Craigslist, Facebook Marketplace, or your draft.</p>
+      </div>
+      <div class="step">
+        <i class="fa-solid fa-location-dot"></i>
+        <h3>2. Select your city</h3>
+        <p>We compare your wording against the updated municipal rules.</p>
+      </div>
+      <div class="step">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <h3>3. Get fixes + PDF</h3>
+        <p>Download corrected text and a compliance-style report.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">Why Landlords Use PetClause AI</h2>
+
+    <div class="grid">
+      <div class="card">
+        <i class="fa-solid fa-bolt"></i>
+        <h4>Fast & automatic</h4>
+        <p>Detects risky phrases and rewrites them in seconds.</p>
+      </div>
+
+      <div class="card">
+        <i class="fa-solid fa-city"></i>
+        <h4>US + EU rules</h4>
+        <p>Database updates weekly to reflect new ordinances.</p>
+      </div>
+
+      <div class="card">
+        <i class="fa-solid fa-dollar-sign"></i>
+        <h4>Pay what you want</h4>
+        <p>$0 is allowed. PDF unlocks with any tip.</p>
+      </div>
+
+      <div class="card">
+        <i class="fa-solid fa-file-shield"></i>
+        <h4>Audit-friendly PDF</h4>
+        <p>Shows analysis summary & ordinance citations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <h2 class="section-title">What Users Say</h2>
+
+    <div class="t-grid">
+      <blockquote>
+        “PetClause AI caught a prohibited breed line that would have caused legal issues in Denver. Paid $5 — saved me thousands.”
+        <cite>— Sarah J., Denver</cite>
+      </blockquote>
+
+      <blockquote>
+        “I manage 12 units across EU + US markets. This tool replaced all my manual legal checking.”
+        <cite>— Mark L., Austin</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Scan your listing now</h2>
+    <p>No account required. Your text stays private.</p>
+    <a class="btn" href="javascript:void(0)" onclick="openScanner()">Launch App &nbsp; <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>&copy; 2025 PetClause AI — Not legal advice.</p>
+    <div style="margin-top:8px;">Contact: petclauseai@gmail.com</div>
+  </div>
+</footer>
+
+<script>
+  function openScanner() {
+    document.getElementById("scannerModal").style.display = "flex";
+  }
+  function closeScanner() {
+    document.getElementById("scannerModal").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
