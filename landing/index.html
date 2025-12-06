@@ -428,6 +428,7 @@
 <script>
   function openScanner() {
     document.getElementById("scannerModal").style.display = "flex";
+    gtag('event', 'unlock_click', { 'event_category': 'conversion' });
     // gtag('event', 'open_scanner', { 'page': 'landing' });
 
 

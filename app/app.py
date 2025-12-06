@@ -198,6 +198,17 @@ if "order_identifier" not in st.session_state: # <-- Add a check for the order I
 query_params = st.query_params
 
 if query_params.get("paid") == "1" and query_params.get("order"):
+
+    # 🔥 GA4 EVENT - PAYMENT SUCCESS
+    st.markdown("""
+    <script>
+    gtag('event', 'payment_success', {
+        'event_category': 'revenue',
+        'value': 19.00
+    });
+    </script>
+    """, unsafe_allow_html=True)
+
     # 1. Set flags in session state (this is what persists the access)
     st.session_state.paid = True
     st.session_state.order_identifier = query_params.get("order")
@@ -375,6 +386,14 @@ city = st.selectbox("Select city:", [
 ], index=0)
 
 scan_button = st.button("🚀 Scan for Pet Clause Compliance", type="primary", use_container_width=True)
+if scan_button:
+    st.markdown("""
+    <script>
+    if (typeof gtag === 'function') {
+        gtag('event', 'scan_start', { 'event_category': 'engagement' });
+    }
+    </script>
+    """, unsafe_allow_html=True)
 
 
 # ====================== RUN ANALYSIS ======================
